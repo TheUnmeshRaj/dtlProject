@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Info</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Product Information</h1>
+
+        <!-- Form to input barcode -->
+        <form method="POST" class="form-inline">
+            <label for="barcode">Enter Barcode:</label>
+            <div class="input-group">
+                <input type="text" id="barcode" name="barcode" placeholder="Enter barcode" required>
+                <button type="submit">Get Product Info by Barcode</button>
+            </div>
+        </form>
+
+        <!-- Form to search products by name -->
+        <form method="POST" class="form-inline">
+            <label for="query">Search Products by Name:</label>
+            <div class="input-group">
+                <input type="text" id="query" name="query" placeholder="Enter product name" required>
+                <button type="submit">Search by Product Name</button>
+            </div>
+        </form>
+
+        <!-- Display error message if any -->
+        {% if error_message %}
+            <div class="error-message">{{ error_message }}</div>
+        {% endif %}
+
+        <!-- Display product info if available -->
+        {% if product_info %}
+            <div class="product-info">
+                <h2>{{ product_info.product_name }}</h2>
+                <p><strong>Brand:</strong> {{ product_info.brands }}</p>
+                <p><strong>Barcode:</strong> {{ product_info.barcode }}</p>
+            </div>
+        {% endif %}
+
+        <!-- Display search results if any -->
+        {% if search_results %}
+            <div class="search-results">
+                <h3>Search Results:</h3>
+                <ul>
+                    {% for product in search_results %}
+                        <li class="product-card">
+                            <h4>{{ product.product_name }}</h4>
+                            <p><strong>Brand:</strong> {{ product.brands }}</p>
+                            <p><strong>Barcode:</strong> {{ product.barcode }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

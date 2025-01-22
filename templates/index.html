@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Information</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 </head>
+
 <body>
     <div class="container">
         <h1>Product Information</h1>
 
         <!-- Form to input barcode -->
-        <form method="POST" class="form-inline">
+        <form id="barcode-form" method="POST" class="form-inline">
             <label for="barcode">Enter Barcode:</label>
             <div class="input-group">
                 <input type="text" id="barcode" name="barcode" placeholder="Enter barcode" required>
@@ -27,6 +29,15 @@
                 <button type="submit">Search by Product Name</button>
             </div>
         </form>
+
+        <!-- Button to start camera and barcode scanning -->
+        <button onclick="startScanner()">Start Camera for Barcode Scanning</button>
+        <div id="scanner-container">
+            <div id="interactive" class="viewport"></div>
+        </div>
+
+        <!-- Display the scanned barcode -->
+        <p id="barcode-result"></p>
 
         <!-- Display error message if any -->
         {% if error_message %}
@@ -100,5 +111,44 @@
             </div>
         {% endif %}
     </div>
+
+    <!-- JavaScript for barcode scanning -->
+    <script>
+        function startScanner() {
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#interactive'),
+                    constraints: {
+                        width: 640,
+                        height: 480,
+                        facingMode: "environment"
+                    }
+                },
+                decoder: {
+                    readers: ["ean_reader", "upc_reader", "code_128_reader"]
+                }
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log("Initialization finished. Ready to start");
+                Quagga.start();
+            });
+
+            Quagga.onDetected(function (result) {
+                const code = result.codeResult.code;
+                document.getElementById("barcode-result").innerText = "Scanned Barcode: " + code;
+                document.getElementById("barcode").value = code;  // Automatically fill the barcode input field
+                Quagga.stop();  // Stop scanner after detecting a barcode
+            });
+        }
+    </script>
+
+    <!-- Camera feed (visible) -->
+    <video id="camera-feed" width="100%" height="auto" style="border: 2px solid black;"></video>
+
 </body>
 </html>

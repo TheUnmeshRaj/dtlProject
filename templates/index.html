@@ -29,12 +29,11 @@
                 <button type="submit">Search by Product Name</button>
             </div>
         </form>
-
-        <!-- Button to start camera and barcode scanning -->
         <button onclick="startScanner()">Start Camera for Barcode Scanning</button>
-        <div id="scanner-container">
-            <div id="interactive" class="viewport"></div>
-        </div>
+<div id="scanner-container" style="display: none;"> <!-- Initially hidden -->
+    <div id="interactive" class="viewport"></div>
+</div>
+
 
         <!-- Display the scanned barcode -->
         <p id="barcode-result"></p>
@@ -115,6 +114,9 @@
     <!-- JavaScript for barcode scanning -->
     <script>
         function startScanner() {
+            // Show the video container when the button is clicked
+            document.getElementById('scanner-container').style.display = 'flex';
+        
             Quagga.init({
                 inputStream: {
                     name: "Live",
@@ -137,18 +139,18 @@
                 console.log("Initialization finished. Ready to start");
                 Quagga.start();
             });
-
+        
+            // Stop scanner and hide video container after barcode is detected
             Quagga.onDetected(function (result) {
                 const code = result.codeResult.code;
                 document.getElementById("barcode-result").innerText = "Scanned Barcode: " + code;
                 document.getElementById("barcode").value = code;  // Automatically fill the barcode input field
                 Quagga.stop();  // Stop scanner after detecting a barcode
+                
+                // Hide the video container after scan
+                document.getElementById('scanner-container').style.display = 'none';
             });
         }
     </script>
-
-    <!-- Camera feed (visible) -->
-    <video id="camera-feed" width="100%" height="auto" style="border: 2px solid black;"></video>
-
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* General Styles */
+
 body {
   font-family: 'Arial', sans-serif;
   background-color: #121212;
@@ -7,6 +7,7 @@ body {
   padding: 0;
   line-height: 1.6;
 }
+
 .container {
   width: 80%;
   margin: 50px auto;
@@ -23,7 +24,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Form Styling */
+
 form {
   margin-bottom: 30px;
 }
@@ -66,7 +67,7 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Product Info and Search Results */
+
 .product-info {
   margin-top: 30px;
   background-color: #333;
@@ -85,6 +86,7 @@ button:hover {
   margin: 5px 0;
 }
 
+
 .search-results ul {
   display: flex;
   flex-wrap: wrap;
@@ -93,36 +95,44 @@ button:hover {
   list-style-type: none;
 }
 
+
 .product-card {
-  background-color: #1f1f1f;
+  background-color: var(--random-color, #333); 
   border-radius: 8px;
   padding: 20px;
   flex: 1 1 calc(33.33% - 20px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  color: #fff;
 }
 
 .product-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-10px);
+  background-color: #4caf50; 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .product-card h4 {
-  color: #ffeb3b;
+  font-size: 1.2rem;
   margin-bottom: 10px;
+  color: #ffd700; 
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .product-card p {
   font-size: 1rem;
+  color: #e0e0e0; 
 }
 
-/* Error Message */
-.error-message {
-  color: #ff6347;
-  font-size: 1.1rem;
-  margin-top: 20px;
+.product-card:hover h4 {
+  color: #fff; 
 }
 
-/* Responsive Design */
+.product-card:hover p {
+  color: #f1f1f1; 
+}
+
+
 @media (max-width: 768px) {
   .product-card {
       flex: 1 1 calc(50% - 20px);
@@ -132,5 +142,25 @@ button:hover {
 @media (max-width: 480px) {
   .product-card {
       flex: 1 1 100%;
+  }
+}
+
+
+.error-message {
+  color: #ff6347;
+  font-size: 1.1rem;
+  margin-top: 20px;
+}
+
+
+@media (max-width: 768px) {
+  .product-card {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .product-card {
+    flex: 1 1 100%;
   }
 }

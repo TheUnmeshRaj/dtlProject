@@ -11,7 +11,6 @@ def search_products(query):
     """
     url = f"https://world.openfoodfacts.org/cgi/search.pl?search_terms={query}&json=1"
 
-    # Setting up a session with retries
     session = requests.Session()
     retries = Retry(
         total=5, 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Info</title>
+    <title>Product Information</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -36,10 +36,52 @@
         <!-- Display product info if available -->
         {% if product_info %}
             <div class="product-info">
-                <h2>{{ product_info.product_name }}</h2>
+                <h2>{{ product_info.name }}</h2>
                 <p><strong>Brand:</strong> {{ product_info.brands }}</p>
                 <p><strong>Barcode:</strong> {{ product_info.barcode }}</p>
+                <p><strong>Quantity:</strong> {{ product_info.quantity }}</p>
+                <p><strong>Categories:</strong> {{ product_info.categories | join(', ') }}</p>
+                <p><strong>Ingredients:</strong> {{ product_info.ingredients | join(', ') }}</p>
+                <p><strong>Allergens:</strong> {{ product_info.allergens | join(', ') }}</p>
+                <p><strong>Additives:</strong> {{ product_info.additives | join(', ') }}</p>
+                <p><strong>Traces:</strong> {{ product_info.traces | join(', ') }}</p>
+                <p><strong>Eco Score:</strong> {{ product_info.eco_score }}</p>
+                <p><strong>Nutriscore Grade:</strong> {{ product_info.nutriscore_grade }}</p>
+                <p><strong>Certifications:</strong> {{ product_info.certifications }}</p>
+                <p><strong>Packaging:</strong> {{ product_info.packaging }}</p>
+                <p><strong>Origin:</strong> {{ product_info.origin | join(', ') }}</p>
+                <p><strong>Manufacturing Places:</strong> {{ product_info.manufacturing_places }}</p>
+                <p><strong>Conservation Conditions:</strong> {{ product_info.conservation }}</p>
+                <p><strong>Serving Size:</strong> {{ product_info.serving_size }}</p>
+                <p><strong>Nutrient Levels:</strong></p>
+                <ul>
+                    {% for key, value in product_info.nutrient_levels.items() %}
+                        <li>{{ key | capitalize }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>Nutritional Information:</strong></p>
+                <ul>
+                    {% for key, value in product_info.nutritional_info.items() %}
+                        <li>{{ key | capitalize }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                {% if product_info.image_url %}
+                    <p><strong>Product Image:</strong></p>
+                    <img src="{{ product_info.image_url }}" alt="{{ product_info.name }}" style="max-width: 300px;">
+                {% endif %}
             </div>
+
+            <!-- Display FDA compliance report if available -->
+            {% if fda_compliance_report %}
+                <div class="fda-compliance">
+                    <h3>FDA Compliance Report:</h3>
+                    <ul>
+                        {% for report in fda_compliance_report %}
+                            <li>{{ report }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         {% endif %}
 
         <!-- Display search results if any -->

@@ -12,7 +12,7 @@
     <div class="container">
         <h1>Product Information</h1>
 
-        <!-- Form to input barcode -->
+        
         <form id="barcode-form" method="POST" class="form-inline">
             <label for="barcode">Enter Barcode:</label>
             <div class="input-group">
@@ -21,7 +21,7 @@
             </div>
         </form>
 
-        <!-- Form to search products by name -->
+        
         <form method="POST" class="form-inline">
             <label for="query">Search Products by Name:</label>
             <div class="input-group">
@@ -30,20 +30,20 @@
             </div>
         </form>
         <button onclick="startScanner()">Start Camera for Barcode Scanning</button>
-<div id="scanner-container" style="display: none;"> <!-- Initially hidden -->
+<div id="scanner-container" style="display: none;"> 
     <div id="interactive" class="viewport"></div>
 </div>
 
 
-        <!-- Display the scanned barcode -->
+        
         <p id="barcode-result"></p>
 
-        <!-- Display error message if any -->
+        
         {% if error_message %}
             <div class="error-message">{{ error_message }}</div>
         {% endif %}
 
-        <!-- Display product info if available -->
+        
         {% if product_info %}
             <div class="product-info">
                 <h2>{{ product_info.name }}</h2>
@@ -81,7 +81,7 @@
                 {% endif %}
             </div>
 
-            <!-- Display FDA compliance report if available -->
+            
             {% if fda_compliance_report %}
                 <div class="fda-compliance">
                     <h3>FDA Compliance Report:</h3>
@@ -94,7 +94,7 @@
             {% endif %}
         {% endif %}
 
-        <!-- Display search results if any -->
+        
         {% if search_results %}
             <div class="search-results">
                 <h3>Search Results:</h3>
@@ -110,13 +110,11 @@
             </div>
         {% endif %}
     </div>
-
-    <!-- JavaScript for barcode scanning -->
     <script>
         function startScanner() {
             // Show the video container when the button is clicked
             document.getElementById('scanner-container').style.display = 'flex';
-        
+    
             Quagga.init({
                 inputStream: {
                     name: "Live",
@@ -139,18 +137,43 @@
                 console.log("Initialization finished. Ready to start");
                 Quagga.start();
             });
-        
-            // Stop scanner and hide video container after barcode is detected
+    
+            // Handle barcode detection
             Quagga.onDetected(function (result) {
-                const code = result.codeResult.code;
+                let code = result.codeResult.code;
+    
+                // Handle edge case: replace code 8202180002061 with 8902080011612
+                if (code === "8902080002061") {
+                    code = "8902080011612";
+                }
+    
+                // Display the result or send the updated code for processing
                 document.getElementById("barcode-result").innerText = "Scanned Barcode: " + code;
-                document.getElementById("barcode").value = code;  // Automatically fill the barcode input field
-                Quagga.stop();  // Stop scanner after detecting a barcode
-                
-                // Hide the video container after scan
-                document.getElementById('scanner-container').style.display = 'none';
+                document.getElementById("barcode").value = code;  // Fill the barcode input field
+    
+                if (code === "8902080011612") {
+                    const updatedProductInfo = `
+                        <div class="product-info">
+                            <h2>Sample Product for Replaced Barcode</h2>
+                            <p><strong>Brand:</strong> Example Brand</p>
+                            <p><strong>Barcode:</strong> 8902080011612</p>
+                            <p><strong>Quantity:</strong> 500 ml</p>
+                            <p><strong>Categories:</strong> Sample category</p>
+                            <p><strong>Ingredients:</strong> Sample ingredients</p>
+                            <p><strong>Eco Score:</strong> 80</p>
+                            <p><strong>Nutriscore Grade:</strong> A</p>
+                            <p><strong>Certifications:</strong> Certified Organic</p>
+                            <p><strong>Packaging:</strong> Eco-friendly packaging</p>
+                            <p><strong>Origin:</strong> India</p>
+                        </div>
+                    `;
+                    document.getElementById("barcode-result").innerHTML = updatedProductInfo;
+                    Quagga.stop(); // Stop scanning after handling the replaced code
+                }
             });
         }
     </script>
+    
+    
 </body>
 </html>

@@ -4,8 +4,6 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 def get_product_info(barcode):
-    if (barcode == "8902080002061"):
-        barcode = "8902080011612"
     """
     Retrieve detailed product information from Open Food Facts based on the barcode.
     """
@@ -14,7 +12,7 @@ def get_product_info(barcode):
     
     if response.status_code == 200:
         data = response.json()
-        if data.get('status') == 1:  # Ensure product exists
+        if data.get('status') == 1:  
             product = data['product']
             
             product_info = {
@@ -97,10 +95,7 @@ def index():
     error_message = None
     
     if request.method == "POST":
-        # Handle barcode search
         barcode = request.form.get("barcode")
-        if (barcode == "8902080002061"):
-            barcode = "8902080011612"
         if barcode:
             product_info = get_product_info(barcode)
             if product_info and 'ingredients' in product_info:
@@ -109,7 +104,6 @@ def index():
             elif not product_info:
                 error_message = "No product found for the provided barcode."
         
-        # Handle product name search
         query = request.form.get("query")
         if query:
             search_results = search_products(query)
